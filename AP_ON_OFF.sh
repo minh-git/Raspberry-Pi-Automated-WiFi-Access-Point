@@ -16,7 +16,11 @@ elif [ $arg1 == "OFF" ] ; then
         systemctl disable hostapd &&
         sed -i '61,64 s/^/#/'  /etc/dhcpcd.conf &&
         systemctl daemon-reload &&
-        service dhcpcd restart
+        service dhcpcd restart &&
+        echo "Restart wpa_supplicant" &&
+        sudo pkill wpa_supplicant &&
+        sleep 2 &&
+        sudo wpa_supplicant -c/etc/wpa_supplicant/wpa_supplicant.conf -iwlan0 -B -Dnl80211,wext
 else
         printf "UNKNOWN input."
 fi
