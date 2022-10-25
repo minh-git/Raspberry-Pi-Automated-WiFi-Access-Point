@@ -14,12 +14,13 @@ echo          "########## be visible. Connect as you would to other networks!   
 echo "\n${GRE}Setting up WiFi Access Point...${NC}"
 
 read -p "Enter your desired WiFi Network Name: " ssid
-read -p "Enter your desired password: " pw1
-read -p "Enter your desired password (again): " pw2
-
+read -p "Enter your desired password, or enter anyway for default password 'Erm123456': " pw1
+# read -p "Enter your desired password (again): " pw2
+pw1=${pw1:-Erm123456}
+pw2=${pw1}
 if [ X"$pw1" = X"$pw2" ]
 then
-    sudo raspi-config nonint do_wifi_country US
+    sudo raspi-config nonint do_wifi_country AU
     sudo apt-get install dnsmasq hostapd -y
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y netfilter-persistent iptables-persistent
     sudo sed -i '$ainterface wlan0\nstatic ip_address=10.20.1.1/24\nnohook wpa_supplicant' /etc/dhcpcd.conf
@@ -32,8 +33,8 @@ then
     echo "interface=wlan0" | sudo tee /etc/dnsmasq.conf
     sudo sed -i '$adhcp-range=10.20.1.5,10.20.1.100,255.255.255.0,24\ndomain=ap\naddress=/rpi.ap/10.20.1.1' /etc/dnsmasq.conf
     sudo touch /etc/hostapd/hostapd.conf
-    echo "country_code=US" | sudo tee /etc/hostapd/hostapd.conf
-    sudo sed -i -e '$a\' -e "interface=wlan0\nssid=${ssid}\nhw_mode=g\nchannel=2\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=${pw1}\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" /etc/hostapd/hostapd.conf
+    echo "country_code=AU" | sudo tee /etc/hostapd/hostapd.conf
+    sudo sed -i -e '$a\' -e "interface=wlan0\nssid=${ssid}\nhw_mode=g\nchannel=6\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=${pw1}\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP" /etc/hostapd/hostapd.conf
     sudo systemctl unmask hostapd.service
     sudo systemctl enable hostapd.service
     echo "\n\n\n"
