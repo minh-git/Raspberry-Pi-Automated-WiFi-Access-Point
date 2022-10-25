@@ -2,7 +2,7 @@
 arg1=$1
 
 if [ $arg1 == "ON" ] ; then
-        sed -i '61,64 s/^#*//'  /etc/dhcpcd.conf  &&
+        sed -i '60,64 s/^#*//'  /etc/dhcpcd.conf  &&
         systemctl daemon-reload &&
         service dhcpcd restart &&
         systemctl start dnsmasq &&
@@ -14,7 +14,7 @@ elif [ $arg1 == "OFF" ] ; then
         systemctl stop hostapd &&
         systemctl disable dnsmasq &&
         systemctl disable hostapd &&
-        sed -i '61,64 s/^/#/'  /etc/dhcpcd.conf &&
+        sed -i '60,64 s/^/#/'  /etc/dhcpcd.conf &&
         systemctl daemon-reload &&
         service dhcpcd restart &&
         echo "Restart wpa_supplicant" &&

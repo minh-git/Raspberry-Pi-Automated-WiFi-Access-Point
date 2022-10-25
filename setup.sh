@@ -15,6 +15,7 @@ echo "\n${GRE}Setting up WiFi Access Point...${NC}"
 
 read -p "Enter your desired WiFi Network Name: " ssid
 read -p "Enter your desired password, or enter anyway for default password 'Erm123456': " pw1
+read -p 'Test' test
 # read -p "Enter your desired password (again): " pw2
 pw1=${pw1:-Erm123456}
 pw2=${pw1}
